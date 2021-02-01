@@ -11,11 +11,16 @@ import java.util.stream.Collectors;
 public class ArrayListProductDao implements ProductDao {
     private long maxId;
     private final List <Product> products;
-    ReadWriteLock lock = new ReentrantReadWriteLock();
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
-    public ArrayListProductDao() throws ProductNotFoundException{
+    public ArrayListProductDao(){
         this.products = new ArrayList<>();
-        saveSampleProducts();
+        try {
+            saveSampleProducts();
+        } catch (ProductNotFoundException e) {
+            System.err.println(e.message);
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -48,11 +53,9 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     @Override
-    public void save(Product product) {
+    public void save(Product product){
         lock.writeLock().lock();
         try{
-            if(product == null) throw new ProductNotFoundException();
-            if(product.getStock() > 0 && product.getPrice()!= null){
                 if(product.getId() != null){
                     delete(product.getId());
                 }
@@ -60,35 +63,21 @@ public class ArrayListProductDao implements ProductDao {
                     product.setId(maxId++);
                 }
                 products.add(product);
-            }
-        }
-        catch(ProductNotFoundException e){
-            e.message();
-        }
-        finally{
+        } finally{
             lock.writeLock().unlock();
         }
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id){
         lock.writeLock().lock();
-        try{
-            products.remove(
-                    products.stream()
-                    .filter(product -> product.getId().equals(id))
-                            .findAny()
-                            .orElseThrow(ProductNotFoundException::new));
-        }
-        catch(ProductNotFoundException e){
-            e.message();
-        }
-        finally{
-            lock.writeLock().unlock();
-        }
+        products.removeIf(product -> product.getId().equals(id));
+        lock.writeLock().unlock();
     }
 
-    private void saveSampleProducts() {
+
+
+    private void saveSampleProducts() throws ProductNotFoundException {
         Currency usd = Currency.getInstance("USD");
         save(new Product("sgs", "Samsung Galaxy S", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg"));
         save(new Product( "sgs2", "Samsung Galaxy S II", new BigDecimal(200), usd, 0, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S%20II.jpg"));
