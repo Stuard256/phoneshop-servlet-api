@@ -1,5 +1,9 @@
 package com.es.phoneshop.model.product;
 
+import com.es.phoneshop.model.product.DAO.ArrayListProductDao;
+import com.es.phoneshop.model.product.DAO.ProductDao;
+import com.es.phoneshop.model.product.entity.Product;
+import com.es.phoneshop.model.product.exception.ProductNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,13 +17,13 @@ public class ArrayListProductDaoTest
     private ProductDao productDao;
 
     @Before
-    public void setup() throws ProductNotFoundException {
-        productDao = new ArrayListProductDao();
+    public void setup(){
+        productDao = ArrayListProductDao.getInstance();
     }
 
     @Test
     public void testFindProductsNoResults() {
-        assertFalse(productDao.findProducts().isEmpty());
+        assertFalse(productDao.findProducts(null,null,null).isEmpty());
     }
 
     @Test
