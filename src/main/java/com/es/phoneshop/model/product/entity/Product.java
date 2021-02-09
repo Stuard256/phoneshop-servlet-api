@@ -1,11 +1,32 @@
 package com.es.phoneshop.model.product.entity;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Currency;
+import java.util.Date;
+import java.util.List;
 
 public class Product {
+
+    public class PriceAndDate{
+        private final BigDecimal price;
+        private final Date date;
+
+        public BigDecimal getPrice() {
+            return price;
+        }
+
+        public Date getDate() {
+            return date;
+        }
+
+        private PriceAndDate(BigDecimal price, Date date){
+            this.price = price;
+            this.date = date;
+        }
+    }
+
     private Long id;
     private String code;
     private String description;
@@ -19,6 +40,7 @@ public class Product {
     private Currency currency;
     private int stock;
     private String imageUrl;
+    private List<PriceAndDate> priceHistory;
 
     public Product() {
     }
@@ -31,6 +53,8 @@ public class Product {
         this.currency = currency;
         this.stock = stock;
         this.imageUrl = imageUrl;
+        this.priceHistory = new ArrayList<>();
+        this.addToPriceHistory(price);
     }
 
     public Product(String code, String description, BigDecimal price, Currency currency, int stock, String imageUrl) {
@@ -40,6 +64,8 @@ public class Product {
         this.currency = currency;
         this.stock = stock;
         this.imageUrl = imageUrl;
+        this.priceHistory = new ArrayList<>();
+        this.addToPriceHistory(price);
     }
 
     public Long getId() {
@@ -71,6 +97,7 @@ public class Product {
     }
 
     public void setPrice(BigDecimal price) {
+        this.addToPriceHistory(price);
         this.price = price;
     }
 
@@ -97,4 +124,14 @@ public class Product {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+
+    public List<PriceAndDate> getPriceHistory() {
+        return priceHistory;
+    }
+
+    public void addToPriceHistory(BigDecimal price) {
+        priceHistory.add(new PriceAndDate(price,Date.from(Instant.now())));
+    }
+
 }

@@ -45,8 +45,6 @@ public class ArrayListProductDao implements ProductDao {
         try {
             return products.stream()
                     .filter(product -> id.equals(product.getId()))
-                    .filter(product -> product.getPrice() != null)
-                    .filter(product -> product.getStock() > 0)
                     .findAny()
                     .orElseThrow(ProductNotFoundException::new);
         } catch (ProductNotFoundException e) {
