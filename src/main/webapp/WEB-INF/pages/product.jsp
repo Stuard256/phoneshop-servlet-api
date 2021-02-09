@@ -7,26 +7,35 @@
   <p>
     ${product.description}
   </p>
-  <table>
-  <tr>
-    <td> Image: </td>
-    <td>
-        <img src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}">
-    </td>
-  </tr>
-  <tr>
-    <td> Code: </td>
-    <td>${product.code}</td>
-  </tr>
-  <tr>
-    <td> Price: </td>
-    <td class="price">
-       <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/>
-    </td>
-  </tr>
-  <tr>
-    <td> Stock: </td>
-    <td>${product.stock}</td>
-  </tr>
-  </table>
+  <form method="post">
+      <table>
+          <tr>
+            <td> Image: </td>
+            <td>
+                <img src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}">
+            </td>
+          </tr>
+          <tr>
+            <td> Code: </td>
+            <td>${product.code}</td>
+          </tr>
+          <tr>
+            <td> Price: </td>
+            <td class="price">
+                <tags:priceHistory product="${product}"/>
+            </td>
+          </tr>
+          <tr>
+            <td> Stock: </td>
+            <td>${product.stock}</td>
+          </tr>
+          <tr>
+              <td> Quantity: </td>
+              <td><input name="quantity"> </td>
+          </tr>
+      </table>
+      <button>Add to cart</button>
+  </form>
+  <script>
+  </script>
 </tags:master>
