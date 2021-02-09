@@ -46,9 +46,7 @@ public class ArrayListProductDao implements ProductDao {
             return products.stream()
                     .filter(product -> id.equals(product.getId()))
                     .findAny()
-                    .orElseThrow(ProductNotFoundException::new);
-        } catch (ProductNotFoundException e) {
-            return null;
+                    .orElse(null);
         } finally {
             lock.readLock().unlock();
         }
@@ -69,20 +67,7 @@ public class ArrayListProductDao implements ProductDao {
         lock.readLock().lock();
         try {
             ArrayListProductService service = new ArrayListProductService();
-            Stream<Product> result = products.stream().filter(product -> !service.isProductIgnored(product));
-            if (service.isQueryNotNullAndNotEmpty(query)) {
-                {
-                    result = result
-                            .filter(product -> service.containsWords(product.getDescription(), query))
-                            .sorted(Comparator.comparing(product -> service.matchWords(product.getDescription(), query)));
-                }
-            }
-            if (service.isSortNeeded(sortField, sortOrder)) {
-                SortField field = SortField.valueOf(sortField);
-                SortOrder order = SortOrder.valueOf(sortOrder);
-                result = service.sortProducts(result,field,order);
-            }
-            return result.collect(Collectors.toList());
+            return service.filterAndSortProducts(products,query,sortField,sortOrder);
         } finally {
             lock.readLock().unlock();
         }
