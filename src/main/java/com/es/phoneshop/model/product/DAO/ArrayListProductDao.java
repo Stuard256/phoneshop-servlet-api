@@ -49,53 +49,40 @@ public class ArrayListProductDao implements ProductDao {
                     .filter(product -> product.getStock() > 0)
                     .findAny()
                     .orElseThrow(ProductNotFoundException::new);
+        } catch (ProductNotFoundException e) {
+            return null;
         } finally {
             lock.readLock().unlock();
         }
     }
 
     @Override
+    public List<Product> findProducts() {
+        return findProducts(null, null, null);
+    }
+
+    @Override
+    public List<Product> findProducts(String query) {
+        return findProducts(query, null, null);
+    }
+
+    @Override
     public List<Product> findProducts(String query, String sortField, String sortOrder) {
         lock.readLock().lock();
         try {
-            Stream<Product> result;
             ArrayListProductService service = new ArrayListProductService();
-            if (sortField == null || sortOrder == null) {
-                if (query != null) {
-                    if (query.isEmpty()) {
-                        result = products.stream()
-                                .filter(product -> product.getPrice() != null)
-                                .filter(product -> product.getStock() > 0);
-                    } else {
-                        result = products.stream()
-                                .filter(product -> service.containsWords(product.getDescription(), query))
-                                .filter(product -> product.getPrice() != null)
-                                .filter(product -> product.getStock() > 0)
-                                .sorted(Comparator.comparing(product -> service.matchWords(product.getDescription(), query)));
-                    }
-                } else {
-                    result = products.stream()
-                            .filter(product -> product.getPrice() != null)
-                            .filter(product -> product.getStock() > 0);
+            Stream<Product> result = products.stream().filter(product -> !service.isProductIgnored(product));
+            if (service.isQueryNotNullAndNotEmpty(query)) {
+                {
+                    result = result
+                            .filter(product -> service.containsWords(product.getDescription(), query))
+                            .sorted(Comparator.comparing(product -> service.matchWords(product.getDescription(), query)));
                 }
-            } else {
+            }
+            if (service.isSortNeeded(sortField, sortOrder)) {
                 SortField field = SortField.valueOf(sortField);
                 SortOrder order = SortOrder.valueOf(sortOrder);
-                Comparator<Product> comparator = Comparator.comparing(product -> {
-                    if (SortField.description == field) {
-                        return (Comparable) product.getDescription();
-                    } else {
-                        return (Comparable) product.getPrice();
-                    }
-                });
-                if (order == SortOrder.desc) {
-                    comparator = comparator.reversed();
-                }
-                result = products.stream()
-                        .filter(product -> query == null || query.isEmpty() || service.containsWords(product.getDescription(), query))
-                        .filter(product -> product.getPrice() != null)
-                        .filter(product -> product.getStock() > 0)
-                        .sorted(comparator);
+                result = service.sortProducts(result,field,order);
             }
             return result.collect(Collectors.toList());
         } finally {
