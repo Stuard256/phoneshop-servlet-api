@@ -1,31 +1,15 @@
 package com.es.phoneshop.model.product.entity;
 
+import com.es.phoneshop.model.product.service.PriceHistoryService;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 
-public class Product {
-
-    public class PriceAndDate{
-        private final BigDecimal price;
-        private final Date date;
-
-        public BigDecimal getPrice() {
-            return price;
-        }
-
-        public Date getDate() {
-            return date;
-        }
-
-        private PriceAndDate(BigDecimal price, Date date){
-            this.price = price;
-            this.date = date;
-        }
-    }
+public class Product implements Serializable {
 
     private Long id;
     private String code;
@@ -125,13 +109,31 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-
     public List<PriceAndDate> getPriceHistory() {
         return priceHistory;
     }
 
     public void addToPriceHistory(BigDecimal price) {
-        priceHistory.add(new PriceAndDate(price,Date.from(Instant.now())));
+        PriceHistoryService service = new PriceHistoryService();
+        service.addToPriceHistory(this, price);
+    }
+
+    public static class PriceAndDate implements Serializable {
+        private final BigDecimal price;
+        private final Date date;
+
+        public PriceAndDate(BigDecimal price, Date date) {
+            this.price = price;
+            this.date = date;
+        }
+
+        public BigDecimal getPrice() {
+            return price;
+        }
+
+        public Date getDate() {
+            return date;
+        }
     }
 
 }
