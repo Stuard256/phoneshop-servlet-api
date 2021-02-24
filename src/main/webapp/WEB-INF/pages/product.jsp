@@ -4,7 +4,6 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <jsp:useBean id="product" type="com.es.phoneshop.model.product.entity.Product" scope="request"/>
 <tags:master pageTitle="Product Details">
-
   <form method="post">
        <p>
             ${cart}

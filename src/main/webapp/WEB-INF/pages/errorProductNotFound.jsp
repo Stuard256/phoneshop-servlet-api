@@ -8,5 +8,4 @@
   <p>
     ${product.description}
   </p>
-
 </tags:master>

@@ -9,7 +9,6 @@ import com.es.phoneshop.model.product.service.CartService;
 import com.es.phoneshop.model.product.service.DefaultCartService;
 import com.es.phoneshop.model.product.service.DefaultLastSeenProductsService;
 import com.es.phoneshop.model.product.service.LastSeenProductsService;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,6 +27,7 @@ public class ProductDetailsPageServlet extends HttpServlet {
         productDao = ArrayListProductDao.getInstance();
         cartService = DefaultCartService.getInstance();
         lastSeen = DefaultLastSeenProductsService.getInstance();
+
     }
 
     @Override
