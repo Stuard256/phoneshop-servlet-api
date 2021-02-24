@@ -17,5 +17,8 @@
   <main>
     <jsp:doBody/>
   </main>
+  <p>
+    (C) Stuard256
+  </p>
 </body>
 </html>
