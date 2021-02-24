@@ -13,14 +13,17 @@ import java.util.stream.Stream;
 
 public class ArrayListProductService implements ProductService {
 
+    @Override
     public boolean isProductIgnored(Product product) {
         return product.getPrice() == null || product.getStock() <= 0;
     }
 
+    @Override
     public boolean isSortNeeded(String sortField, String sortOrder) {
         return sortField != null && sortOrder != null;
     }
 
+    @Override
     public boolean isQueryNotNullAndNotEmpty(String query) {
         if (query == null) {
             return false;
@@ -29,6 +32,7 @@ public class ArrayListProductService implements ProductService {
         }
     }
 
+    @Override
     public List<Product> filterAndSortProducts(List<Product> products, String query, String sortField, String sortOrder) {
         Stream<Product> result = products.stream().filter(product -> !isProductIgnored(product));
         if (isQueryNotNullAndNotEmpty(query)) {
@@ -42,8 +46,8 @@ public class ArrayListProductService implements ProductService {
         }
 
         if (isSortNeeded(sortField, sortOrder)) {
-            SortField field = SortField.valueOf(sortField);
-            SortOrder order = SortOrder.valueOf(sortOrder);
+            SortField field = SortField.valueOf(sortField.toUpperCase());
+            SortOrder order = SortOrder.valueOf(sortOrder.toUpperCase());
             Comparator<Product> comparator = Comparator.comparing(product -> {
                 if (field == SortField.DESCRIPTION) {
                     return (Comparable) product.getDescription();

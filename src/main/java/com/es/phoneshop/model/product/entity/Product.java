@@ -2,14 +2,14 @@ package com.es.phoneshop.model.product.entity;
 
 import com.es.phoneshop.model.product.service.PriceHistoryService;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 
-public class Product {
+public class Product implements Serializable {
 
     private Long id;
     private String code;
@@ -25,6 +25,7 @@ public class Product {
     private int stock;
     private String imageUrl;
     private List<PriceAndDate> priceHistory;
+
     public Product() {
     }
 
@@ -114,10 +115,10 @@ public class Product {
 
     public void addToPriceHistory(BigDecimal price) {
         PriceHistoryService service = new PriceHistoryService();
-        service.addToPriceHistory(this,price);
+        service.addToPriceHistory(this, price);
     }
 
-    public static class PriceAndDate {
+    public static class PriceAndDate implements Serializable {
         private final BigDecimal price;
         private final Date date;
 

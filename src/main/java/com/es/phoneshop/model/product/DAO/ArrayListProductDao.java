@@ -1,18 +1,13 @@
 package com.es.phoneshop.model.product.DAO;
 
 import com.es.phoneshop.model.product.entity.Product;
-import com.es.phoneshop.model.product.entity.SortField;
-import com.es.phoneshop.model.product.entity.SortOrder;
 import com.es.phoneshop.model.product.exception.ProductNotFoundException;
 import com.es.phoneshop.model.product.service.ArrayListProductService;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ArrayListProductDao implements ProductDao {
     private volatile static ArrayListProductDao instance;
@@ -67,7 +62,7 @@ public class ArrayListProductDao implements ProductDao {
         lock.readLock().lock();
         try {
             ArrayListProductService service = new ArrayListProductService();
-            return service.filterAndSortProducts(products,query,sortField,sortOrder);
+            return service.filterAndSortProducts(products, query, sortField, sortOrder);
         } finally {
             lock.readLock().unlock();
         }
