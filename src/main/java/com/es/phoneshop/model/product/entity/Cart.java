@@ -1,38 +1,44 @@
 package com.es.phoneshop.model.product.entity;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class Cart {
+public class Cart implements Serializable {
     private List<CartItem> items;
-
-    public Cart() {
-        this.items = new ArrayList<>();
-    }
 
     public List<CartItem> getItems() {
         return items;
     }
 
-    public CartItem getItem(Product product) {
-        Optional<CartItem> found = items.stream().filter(item -> item.getProduct().equals(product)).findAny();
-        return found.orElse(null);
+    public int getTotalQuantity() {
+        return totalQuantity;
     }
 
-    public void addItem(CartItem cartItem) {
-        Optional<CartItem> found = items.stream().filter(item -> item.getProduct().equals(cartItem.getProduct())).findAny();
-        if (found.isPresent()) {
-            found.get().increaseQuantity(cartItem.getQuantity());
-        } else {
-            items.add(cartItem);
-        }
+    public void setTotalQuantity(int totalQuantity) {
+        this.totalQuantity = totalQuantity;
+    }
+
+    public BigDecimal getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(BigDecimal totalCost) {
+        this.totalCost = totalCost;
+    }
+
+    private int totalQuantity;
+    private BigDecimal totalCost;
+
+    public Cart() {
+        this.items = new ArrayList<>();
     }
 
     @Override
     public String toString() {
-        return "Cart{" +
-                "items=" + items +
-                '}';
+        return "Cart:" +
+                "items:" + items;
     }
 }

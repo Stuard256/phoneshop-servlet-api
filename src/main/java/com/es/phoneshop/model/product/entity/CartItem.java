@@ -1,6 +1,8 @@
 package com.es.phoneshop.model.product.entity;
 
-public class CartItem {
+import java.io.Serializable;
+
+public class CartItem implements Serializable {
     private Product product;
     private int quantity;
 
@@ -27,5 +29,9 @@ public class CartItem {
                 "code=" + product.getCode() +
                 ", quantity=" + quantity +
                 '}';
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }
