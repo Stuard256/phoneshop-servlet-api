@@ -4,12 +4,12 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <jsp:useBean id="product" type="com.es.phoneshop.model.product.entity.Product" scope="request"/>
 <tags:master pageTitle="Product Details">
-  <form method="post">
+  <form method="post" action="${pageContext.servletContext.contextPath}/products/${product.id}">
        <p>
             ${cart}
       </p>
         <c:if test="${not empty param.message}">
-            <div class="message">
+            <div class="success">
                 Product was added successfully to cart
             </div>
         </c:if>

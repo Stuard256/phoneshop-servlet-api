@@ -1,4 +1,4 @@
-header {
+ header {
   background-color: aquamarine;
   font: 400 70px/1.3 'Lobster Two', Helvetica, sans-serif;
   color: #2b2b2b;
@@ -16,6 +16,9 @@ table {
   border-collapse: collapse;
   border : 1px solid gray;
 }
+tr {
+  text-align: center;
+}
 td {
   padding: 10px;
   border : 1px solid gray;
@@ -24,9 +27,23 @@ td {
 .price {
   text-align: right;
 }
+.error {
+  text-align: center;
+  margin-top: 5px;
+  border:2px solid red;
+  color: red;
+}
+.success {
+  text-align: center;
+  margin-top: 5px;
+  border:2px solid green;
+  color: green;
+}
+
 img.product-tile {
   max-width: 64px;
 }
+
 
 /* Page specific styles */
 body.product-list {

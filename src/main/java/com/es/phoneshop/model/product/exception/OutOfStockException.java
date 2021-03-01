@@ -2,15 +2,25 @@ package com.es.phoneshop.model.product.exception;
 
 import com.es.phoneshop.model.product.entity.Product;
 
-public class OutOfStockException extends Exception{
-    private Product product;
-    private int stockRequested;
-    private int stockAvailable;
+public class OutOfStockException extends Exception {
+    private final Product product;
+    private final int stockRequested;
+    private final int stockAvailable;
 
     public OutOfStockException(Product product, int stockRequested, int stockAvailable) {
         this.product = product;
         this.stockRequested = stockRequested;
         this.stockAvailable = stockAvailable;
+    }
+
+
+    @Override
+    public String toString() {
+        if (this.getStockRequested() > 0) {
+            return "Product " + this.getProduct().getDescription() + " is gonna be out of stock. Available: " + this.getStockAvailable() + " ,wanted: " + this.getStockRequested();
+        } else {
+            return "Quantity must be greater than zero";
+        }
     }
 
     public Product getProduct() {

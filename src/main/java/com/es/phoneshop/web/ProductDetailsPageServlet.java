@@ -9,6 +9,7 @@ import com.es.phoneshop.model.product.service.CartService;
 import com.es.phoneshop.model.product.service.DefaultCartService;
 import com.es.phoneshop.model.product.service.DefaultLastSeenProductsService;
 import com.es.phoneshop.model.product.service.LastSeenProductsService;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -38,9 +39,9 @@ public class ProductDetailsPageServlet extends HttpServlet {
             request.setAttribute("product", productDao.getProduct(productId));
             request.setAttribute("cart", cartService.getCart(request));
             lastSeen.addToLastSeen(request, product);
-            request.setAttribute("lastSeen",lastSeen.getLastSeen(request));
+            request.setAttribute("lastSeen", lastSeen.getLastSeen(request));
             request.getRequestDispatcher("/WEB-INF/pages/product.jsp").forward(request, response);
-        }catch (ProductNotFoundException | NumberFormatException e){
+        } catch (ProductNotFoundException | NumberFormatException e) {
             request.setAttribute("error", "Not a number");
         }
     }
@@ -60,14 +61,14 @@ public class ProductDetailsPageServlet extends HttpServlet {
             return;
         }
         try {
-            cartService.add(cartService.getCart(request), productId,quantity);
+            cartService.add(cartService.getCart(request), productId, quantity);
         } catch (OutOfStockException e) {
-            request.setAttribute("error", "Product "+ e.getProduct() + " is gonna be out of stock. Available: " + e.getStockAvailable() + " ,wanted: " + e.getStockRequested());
+            request.setAttribute("error", e.toString());
             doGet(request, response);
             return;
         }
 
-        response.sendRedirect(request.getContextPath()+ "/products/" + productId + "?message=Product added to cart");
+        response.sendRedirect(request.getContextPath() + "/products/" + productId + "?message=Product added to cart");
     }
 
     private Long parseProductId(HttpServletRequest request) {

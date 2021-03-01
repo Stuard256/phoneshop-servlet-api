@@ -12,3 +12,4 @@ public interface ProductService {
     boolean isQueryNotNullAndNotEmpty(String query);
 
     List<Product> filterAndSortProducts(List<Product> products, String query, String sortField, String sortOrder);
+}

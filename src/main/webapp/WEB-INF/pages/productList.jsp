@@ -24,6 +24,14 @@
             <tags:sortLink field="price" order="asc"/>
             <tags:sortLink field="price" order="desc"/>
         </td>
+        <c:if test="${not empty param.query}">
+            <td>
+               Quantity
+            </td>
+            <td>
+                Action
+            </td>
+        </c:if>
       </tr>
     </thead>
     <c:forEach var="product" items="${products}">
@@ -35,6 +43,15 @@
         <td class="price">
             <tags:priceHistory product="${product}"/>
         </td>
+        <c:if test="${not empty param.query}">
+           <form method="post" action="${pageContext.servletContext.contextPath}/products/${product.id}">
+           <td><input name="quantity" value="1" class="quantity">
+           </td>
+           <td>
+               <button>Buy</button>
+           </td>
+           </form>
+        </c:if>
       </tr>
     </c:forEach>
   </table>
