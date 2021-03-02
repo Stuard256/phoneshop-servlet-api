@@ -1,9 +1,9 @@
 package com.es.phoneshop.model.product;
 
-import com.es.phoneshop.model.product.DAO.ArrayListProductDao;
-import com.es.phoneshop.model.product.DAO.ProductDao;
-import com.es.phoneshop.model.product.entity.Product;
-import com.es.phoneshop.model.product.exception.ProductNotFoundException;
+import com.es.phoneshop.DAO.Product.ArrayListProductDao;
+import com.es.phoneshop.DAO.Product.ProductDao;
+import com.es.phoneshop.entity.product.Product;
+import com.es.phoneshop.exception.ProductNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,7 +41,7 @@ public class ArrayListProductDaoTest
     }
 
     @Test
-    public void testDeleteProduct() {
+    public void testDeleteProduct() throws ProductNotFoundException {
         Currency usd = Currency.getInstance("USD");
         Product product = new Product( "test-product", "TEST", new BigDecimal(400), usd, 190, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Siemens/Siemens%20SXG75.jpg");
         productDao.save(product);
@@ -50,7 +50,7 @@ public class ArrayListProductDaoTest
     }
 
     @Test
-    public void testFindProductWithZeroStock() throws ProductNotFoundException {
+    public void testFindProductWithZeroStock(){
         Currency usd = Currency.getInstance("USD");
         Product product = new Product( "test-product", "TEST", new BigDecimal(10), usd, 0, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Siemens/Siemens%20SXG75.jpg");
         productDao.save(product);
@@ -58,7 +58,7 @@ public class ArrayListProductDaoTest
     }
 
     @Test
-    public void testFindProductWithNullPrice() throws ProductNotFoundException {
+    public void testFindProductWithNullPrice(){
         Currency usd = Currency.getInstance("USD");
         Product product = new Product( "test-product", "TEST", null, usd, 190, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Siemens/Siemens%20SXG75.jpg");
         productDao.save(product);
