@@ -14,6 +14,7 @@ import java.io.IOException;
 public class MiniCartServlet extends HttpServlet {
 
     protected static final String MINICART_JSP = "/WEB-INF/pages/minicart.jsp";
+
     private CartService cartService;
 
     @Override
@@ -27,5 +28,6 @@ public class MiniCartServlet extends HttpServlet {
         Cart cart = cartService.getCart(request);
         request.setAttribute("cart", cart);
         request.getRequestDispatcher(MINICART_JSP).include(request, response);
+
     }
 }

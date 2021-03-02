@@ -1,9 +1,11 @@
 package com.es.phoneshop.web;
 
 import com.es.phoneshop.model.product.entity.Cart;
+
 import com.es.phoneshop.model.product.exception.EmptyCartException;
 import com.es.phoneshop.model.product.exception.OutOfStockException;
 import com.es.phoneshop.model.product.exception.ProductNotFoundException;
+
 import com.es.phoneshop.model.product.service.CartService;
 import com.es.phoneshop.model.product.service.DefaultCartService;
 
@@ -21,6 +23,7 @@ import java.util.Map;
 
 public class CartPageServlet extends HttpServlet {
     protected static final String CART_JSP = "/WEB-INF/pages/cart.jsp";
+
     private CartService cartService;
 
     @Override
@@ -42,7 +45,6 @@ public class CartPageServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/cart?message=Cart is empty");
             return;
         }
-
         String[] productIds = request.getParameterValues("productId");
         String[] quantities = request.getParameterValues("quantity");
 

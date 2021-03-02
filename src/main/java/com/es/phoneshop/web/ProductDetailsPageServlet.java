@@ -61,8 +61,7 @@ public class ProductDetailsPageServlet extends HttpServlet {
             request.setAttribute("error", "Quantity must be number");
             doGet(request, response);
             return;
-        }
-        catch (ProductNotFoundException e) {
+        }catch (ProductNotFoundException e) {
             ErrorHandler.handle(request, response, e);
             return;
         } catch (OutOfStockException e) {

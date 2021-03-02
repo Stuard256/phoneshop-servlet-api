@@ -29,7 +29,6 @@ public class DefaultCartService implements CartService {
     private static class SingletonHelper {
         private static final DefaultCartService INSTANCE = new DefaultCartService();
     }
-
     public Optional<CartItem> getItem(Cart cart, Long productId) {
         return cart.getItems().stream().filter(item -> item.getProduct().getId().equals(productId)).findAny();
     }
@@ -69,6 +68,14 @@ public class DefaultCartService implements CartService {
         if(product == null){
             throw new ProductNotFoundException();
         }
+        checkQuantity(cart, product, quantity);
+        addItem(cart, new CartItem(product, quantity));
+        recalculateCart(cart);
+    }
+
+    @Override
+    public synchronized void update(Cart cart, Long productId, int quantity) throws OutOfStockException {
+        Product product = products.getProduct(productId);
         Optional<CartItem> item = getItem(cart, productId);
         checkQuantity(cart, product, quantity);
         if (quantity == 0) {

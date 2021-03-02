@@ -63,7 +63,7 @@
         <servlet-name>deleteCartItem</servlet-name>
         <url-pattern>/cart/deleteCartItem/*</url-pattern>
     </servlet-mapping>
-
+  
     <servlet>
         <servlet-name>checkout</servlet-name>
         <servlet-class>com.es.phoneshop.web.CheckoutPageServlet</servlet-class>

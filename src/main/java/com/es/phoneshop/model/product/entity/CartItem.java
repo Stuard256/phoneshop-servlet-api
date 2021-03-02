@@ -2,7 +2,9 @@ package com.es.phoneshop.model.product.entity;
 
 import java.io.Serializable;
 
+
 public class CartItem implements Serializable, Cloneable {
+
     private Product product;
     private int quantity;
 

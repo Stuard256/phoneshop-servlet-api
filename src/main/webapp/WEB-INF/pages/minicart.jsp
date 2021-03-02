@@ -5,3 +5,4 @@
 
 <jsp:useBean id="cart" type="com.es.phoneshop.model.product.entity.Cart" scope="request"/>
 <a href="/phoneshop-servlet-api/cart"> Cart</a>:  ${cart.totalQuantity} items, total cost: <fmt:formatNumber value='${cart.totalCost}' type="currency" currencySymbol="${item.product.currency.symbol}"/>
+

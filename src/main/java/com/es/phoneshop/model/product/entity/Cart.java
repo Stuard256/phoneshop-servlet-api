@@ -10,7 +10,6 @@ public class Cart implements Serializable {
     public void setItems(List<CartItem> items) {
         this.items = items;
     }
-
     private List<CartItem> items;
 
     public List<CartItem> getItems() {
@@ -20,7 +19,7 @@ public class Cart implements Serializable {
     public int getTotalQuantity() {
         return totalQuantity;
     }
-
+  
     public void setTotalQuantity(int totalQuantity) {
         this.totalQuantity = totalQuantity;
     }
