@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ProductListPageServlet extends HttpServlet {
+
+    protected static final String PRODUCT_LIST_JSP = "/WEB-INF/pages/productList.jsp";
     private ProductDao productDao;
 
     @Override
@@ -25,6 +27,6 @@ public class ProductListPageServlet extends HttpServlet {
         String sortField = request.getParameter("field");
         String sortOrder = request.getParameter("order");
         request.setAttribute("products", productDao.findProducts(query, sortField, sortOrder));
-        request.getRequestDispatcher("/WEB-INF/pages/productList.jsp").forward(request, response);
+        request.getRequestDispatcher(PRODUCT_LIST_JSP).forward(request, response);
     }
 }

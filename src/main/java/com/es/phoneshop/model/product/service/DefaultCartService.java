@@ -6,6 +6,7 @@ import com.es.phoneshop.model.product.entity.Cart;
 import com.es.phoneshop.model.product.entity.CartItem;
 import com.es.phoneshop.model.product.entity.Product;
 import com.es.phoneshop.model.product.exception.OutOfStockException;
+import com.es.phoneshop.model.product.exception.ProductNotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -25,12 +26,16 @@ public class DefaultCartService implements CartService {
         return SingletonHelper.INSTANCE;
     }
 
+    private static class SingletonHelper {
+        private static final DefaultCartService INSTANCE = new DefaultCartService();
+    }
+
     public Optional<CartItem> getItem(Cart cart, Long productId) {
         return cart.getItems().stream().filter(item -> item.getProduct().getId().equals(productId)).findAny();
     }
 
     public void addItem(Cart cart, CartItem cartItem) {
-        Optional<CartItem> found = cart.getItems().stream().filter(item -> item.getProduct().equals(cartItem.getProduct())).findAny();
+        Optional<CartItem> found = cart.getItems().stream().filter(item -> item.getProduct().getId().equals(cartItem.getProduct().getId())).findAny();
         if (found.isPresent()) {
             found.get().increaseQuantity(cartItem.getQuantity());
         } else {
@@ -48,16 +53,22 @@ public class DefaultCartService implements CartService {
     }
 
     @Override
-    public synchronized void add(Cart cart, Long productId, int quantity) throws OutOfStockException {
+    public synchronized void add(Cart cart, Long productId, int quantity) throws OutOfStockException, ProductNotFoundException {
         Product product = products.getProduct(productId);
+        if(product == null){
+            throw new ProductNotFoundException();
+        }
         checkQuantity(cart, product, quantity);
         addItem(cart, new CartItem(product, quantity));
         recalculateCart(cart);
     }
 
     @Override
-    public synchronized void update(Cart cart, Long productId, int quantity) throws OutOfStockException {
+    public synchronized void update(Cart cart, Long productId, int quantity) throws OutOfStockException, ProductNotFoundException {
         Product product = products.getProduct(productId);
+        if(product == null){
+            throw new ProductNotFoundException();
+        }
         Optional<CartItem> item = getItem(cart, productId);
         checkQuantity(cart, product, quantity);
         if (quantity == 0) {
@@ -99,7 +110,4 @@ public class DefaultCartService implements CartService {
             cart.setTotalCost(totalCost[0]);
     }
 
-    private static class SingletonHelper {
-        private static final DefaultCartService INSTANCE = new DefaultCartService();
-    }
 }
