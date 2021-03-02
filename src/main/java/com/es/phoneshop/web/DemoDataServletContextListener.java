@@ -1,9 +1,9 @@
 package com.es.phoneshop.web;
 
-import com.es.phoneshop.model.product.DAO.ArrayListProductDao;
-import com.es.phoneshop.model.product.DAO.ProductDao;
-import com.es.phoneshop.model.product.entity.Product;
-import com.es.phoneshop.model.product.exception.ProductNotFoundException;
+import com.es.phoneshop.DAO.Product.ArrayListProductDao;
+import com.es.phoneshop.DAO.Product.ProductDao;
+import com.es.phoneshop.entity.product.Product;
+import com.es.phoneshop.exception.ProductNotFoundException;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -13,7 +13,7 @@ import java.util.Currency;
 import java.util.List;
 
 public class DemoDataServletContextListener implements ServletContextListener {
-    private ProductDao productDao;
+    private final ProductDao productDao;
 
     public DemoDataServletContextListener() {
         this.productDao = ArrayListProductDao.getInstance();
@@ -26,7 +26,7 @@ public class DemoDataServletContextListener implements ServletContextListener {
             for (Product product : getSampleProducts()) {
                 try {
                     productDao.save(product);
-                } catch (ProductNotFoundException e) {
+                } catch (Exception e) {
                     throw new RuntimeException("Failed to insert demo data", e);
                 }
             }

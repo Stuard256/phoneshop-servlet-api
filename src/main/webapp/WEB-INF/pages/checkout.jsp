@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
-<jsp:useBean id="order" type="com.es.phoneshop.model.product.entity.Order" scope="request"/>
+<jsp:useBean id="order" type="com.es.phoneshop.entity.order.Order" scope="request"/>
 <tags:master pageTitle="Checkout">
 <form method="post" action="${pageContext.servletContext.contextPath}/checkout">
     <div>
@@ -88,8 +88,21 @@
     <tr>
             <td> Payment method: <span style="color:red">*</span></td>
             <c:set var="error" value="${errors['paymentMethod']}"/>
-            <td> <input type="radio" name="paymentMethod" value="0">Cash
-                   <input type="radio" name="paymentMethod" value="1">Card
+            <td>
+                 <c:choose>
+                        <c:when test="${order.getPaymentMethod().toString().equals('CASH')}">
+                            <input type="radio" name="paymentMethod" value="CASH" checked="checked">Cash
+                            <input type="radio" name="paymentMethod" value="CARD">Card
+                        </c:when>
+                        <c:when test="${order.getPaymentMethod().toString().equals('CARD')}">
+                            <input type="radio" name="paymentMethod" value="CASH">Cash
+                            <input type="radio" name="paymentMethod" value="CARD" checked="checked">Card
+                        </c:when>
+                        <c:otherwise>
+                            <input type="radio" name="paymentMethod" value="CASH">Cash
+                            <input type="radio" name="paymentMethod" value="CARD">Card
+                        </c:otherwise>
+                 </c:choose>
             <c:if test="${not empty error}">
                 <div class="error">
                     ${error}

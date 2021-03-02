@@ -12,6 +12,7 @@
        <div class="error">
            ${param.error}
        </div>
+       </br>
   </c:if>
   <form>
     <input name="query" value="${param.query}"/>
