@@ -1,7 +1,9 @@
 package com.es.phoneshop.web;
 
 import com.es.phoneshop.model.product.entity.Cart;
+import com.es.phoneshop.model.product.exception.EmptyCartException;
 import com.es.phoneshop.model.product.exception.OutOfStockException;
+import com.es.phoneshop.model.product.exception.ProductNotFoundException;
 import com.es.phoneshop.model.product.service.CartService;
 import com.es.phoneshop.model.product.service.DefaultCartService;
 
@@ -18,6 +20,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class CartPageServlet extends HttpServlet {
+    protected static final String CART_JSP = "/WEB-INF/pages/cart.jsp";
     private CartService cartService;
 
     @Override
@@ -30,23 +33,27 @@ public class CartPageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Cart cart = cartService.getCart(request);
         request.setAttribute("cart", cart);
-        request.getRequestDispatcher("/WEB-INF/pages/cart.jsp").forward(request, response);
+        request.getRequestDispatcher(CART_JSP).forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if(cartService.getCart(request).isEmpty()){
+            response.sendRedirect(request.getContextPath() + "/cart?message=Cart is empty");
+            return;
+        }
+
         String[] productIds = request.getParameterValues("productId");
         String[] quantities = request.getParameterValues("quantity");
 
         Map<Long, String> errors = new HashMap<>();
         for (int i = 0; i < productIds.length; i++) {
             Long productId = Long.valueOf(productIds[i]);
-
             int quantity;
             try {
                 quantity = getQuantity(quantities[i], request);
                 cartService.update(cartService.getCart(request), productId, quantity);
-            } catch (ParseException | OutOfStockException e) {
+            } catch (ParseException | OutOfStockException | ProductNotFoundException e) {
                 handleError(errors, productId, e);
             }
         }

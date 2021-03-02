@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Optional;
 
 public class Cart implements Serializable {
+    public void setItems(List<CartItem> items) {
+        this.items = items;
+    }
+
     private List<CartItem> items;
 
     public List<CartItem> getItems() {
@@ -40,5 +44,9 @@ public class Cart implements Serializable {
     public String toString() {
         return "Cart:" +
                 "items:" + items;
+    }
+
+    public boolean isEmpty() {
+        return items.isEmpty();
     }
 }

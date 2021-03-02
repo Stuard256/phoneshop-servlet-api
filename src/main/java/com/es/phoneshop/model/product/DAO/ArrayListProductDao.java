@@ -35,7 +35,7 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     @Override
-    public Product getProduct(Long id) throws ProductNotFoundException {
+    public Product getProduct(Long id){
         lock.readLock().lock();
         try {
             return products.stream()

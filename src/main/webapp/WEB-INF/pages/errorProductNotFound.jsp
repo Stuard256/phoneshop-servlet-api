@@ -2,10 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
-<jsp:useBean id="product" type="com.es.phoneshop.model.product.entity.Product" scope="request"/>
 <tags:master pageTitle="ProductNotFound">
   <h1> Product not found </h1>
   <p>
-    ${product.description}
+    <h2>${error}</h2>
   </p>
 </tags:master>
