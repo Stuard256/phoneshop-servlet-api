@@ -1,5 +1,11 @@
 package com.es.phoneshop.model.product.exception;
 
-public class ProductNotFoundException extends RuntimeException {
+import java.util.function.Supplier;
 
+public class ProductNotFoundException extends Exception{
+    public ProductNotFoundException(){}
+    @Override
+    public String getMessage() {
+        return "Product wasn't found";
+    }
 }

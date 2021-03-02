@@ -36,13 +36,16 @@ public class ProductDetailsPageServlet extends HttpServlet {
         try {
             Long productId = parseProductId(request);
             Product product = productDao.getProduct(productId);
+            if (product == null) {
+                throw new ProductNotFoundException();
+            }
             request.setAttribute("product", productDao.getProduct(productId));
             request.setAttribute("cart", cartService.getCart(request));
             lastSeen.addToLastSeen(request, product);
             request.setAttribute("lastSeen", lastSeen.getLastSeen(request));
             request.getRequestDispatcher("/WEB-INF/pages/product.jsp").forward(request, response);
-        } catch (ProductNotFoundException | NumberFormatException e) {
-            request.setAttribute("error", "Not a number");
+        } catch (NumberFormatException | ProductNotFoundException e) {
+            ErrorHandler.handle(request,response,e);
         }
     }
 
@@ -50,24 +53,23 @@ public class ProductDetailsPageServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Long productId = parseProductId(request);
         String quantityString = request.getParameter("quantity");
-
-
         int quantity;
         try {
             quantity = Integer.parseInt(quantityString);
-        } catch (NumberFormatException ex) {
-            request.setAttribute("error", "Not a number");
-            doGet(request, response);
-            return;
-        }
-        try {
             cartService.add(cartService.getCart(request), productId, quantity);
-        } catch (OutOfStockException e) {
-            request.setAttribute("error", e.toString());
+        }catch (NumberFormatException e){
+            request.setAttribute("error", "Quantity must be number");
             doGet(request, response);
             return;
         }
-
+        catch (ProductNotFoundException e) {
+            ErrorHandler.handle(request, response, e);
+            return;
+        } catch (OutOfStockException e) {
+            ErrorHandler.handle(request, response, e);
+            doGet(request, response);
+            return;
+        }
         response.sendRedirect(request.getContextPath() + "/products/" + productId + "?message=Product added to cart");
     }
 
