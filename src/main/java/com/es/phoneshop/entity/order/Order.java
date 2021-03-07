@@ -17,9 +17,6 @@ public class Order extends Cart {
     private String deliveryAddress;
     private PaymentMethod paymentMethod;
 
-    public Order() {
-    }
-
     public Long getId() {
         return id;
     }
