@@ -7,22 +7,13 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class DefaultDosProtectionService implements DosProtectionService {
+    private static final long THRESHOLD = 10;
+    private final Map<String, Long> countMap = new ConcurrentHashMap<>();
+
     {
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(new Timer(), 0, 1, TimeUnit.MINUTES);
     }
-
-
-
-    private class  Timer implements Runnable {
-        public void run() {
-            countMap.clear();
-        }
-    }
-
-    private static final long THRESHOLD = 10;
-
-    private final Map<String, Long> countMap = new ConcurrentHashMap<>();
 
     public static DefaultDosProtectionService getInstance() {
         return DefaultDosProtectionService.SingletonHelper.INSTANCE;
@@ -43,10 +34,14 @@ public class DefaultDosProtectionService implements DosProtectionService {
         return true;
     }
 
-
-
     private static class SingletonHelper {
         private static final DefaultDosProtectionService INSTANCE = new DefaultDosProtectionService();
+    }
+
+    private class Timer implements Runnable {
+        public void run() {
+            countMap.clear();
+        }
     }
 
 }
