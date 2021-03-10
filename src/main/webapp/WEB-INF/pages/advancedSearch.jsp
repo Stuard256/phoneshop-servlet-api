@@ -33,7 +33,7 @@
     </table>
     <button> Search </button>
   </form>
-  <c:if test="${param.query != null && param.error == null}">
+  <c:if test="${param.query != null && error == null}">
     <jsp:useBean id="products" type="java.util.ArrayList" scope="request"/>
       <table>
         <thead>

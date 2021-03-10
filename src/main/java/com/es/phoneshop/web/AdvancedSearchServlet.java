@@ -38,11 +38,7 @@ public class AdvancedSearchServlet extends HttpServlet {
         try {
             products = productDao.advancedSearch(query, minPrice, maxPrice,searchOption);
         } catch (InvalidParamException e) {
-            if (e.code == InvalidParamException.codes.MIN) {
-                request.setAttribute("error", e.toString());
-            } else {
-                request.setAttribute("error", e.toString());
-            }
+            request.setAttribute("error", e.toString());
         }
 
         request.setAttribute("products", products);
