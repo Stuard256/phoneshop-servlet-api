@@ -1,6 +1,7 @@
 package com.es.phoneshop.DAO.Product;
 
 import com.es.phoneshop.entity.product.Product;
+import com.es.phoneshop.exception.InvalidParamException;
 import com.es.phoneshop.exception.ProductNotFoundException;
 import com.es.phoneshop.service.product.ArrayListProductService;
 
@@ -63,6 +64,17 @@ public class ArrayListProductDao implements ProductDao {
         try {
             ArrayListProductService service = new ArrayListProductService();
             return service.filterAndSortProducts(products, query, sortField, sortOrder);
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    @Override
+    public List<Product> advancedSearch(String query, String minPrice, String maxPrice,String searchOption) throws InvalidParamException {
+        lock.readLock().lock();
+        try {
+            ArrayListProductService service = new ArrayListProductService();
+            return service.advancedSearchOfProducts(products, query, minPrice, maxPrice, searchOption);
         } finally {
             lock.readLock().unlock();
         }

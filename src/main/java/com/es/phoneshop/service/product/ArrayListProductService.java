@@ -3,7 +3,9 @@ package com.es.phoneshop.service.product;
 import com.es.phoneshop.entity.product.Product;
 import com.es.phoneshop.entity.product.SortField;
 import com.es.phoneshop.entity.product.SortOrder;
+import com.es.phoneshop.exception.InvalidParamException;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -19,8 +21,11 @@ public class ArrayListProductService implements ProductService {
     }
 
     @Override
-    public boolean isSortNeeded(String sortField, String sortOrder) {
-        return sortField != null && sortOrder != null;
+    public boolean isSortParamNotEmpty(String sortParam) {
+        if(sortParam != null){
+            return !sortParam.isEmpty();
+        }
+        return false;
     }
 
     @Override
@@ -44,8 +49,7 @@ public class ArrayListProductService implements ProductService {
                                 wordInDescription.contains(word)));
             });
         }
-
-        if (isSortNeeded(sortField, sortOrder)) {
+        if (isSortParamNotEmpty(sortField)&& isSortParamNotEmpty(sortOrder)) {
             SortField field = SortField.valueOf(sortField.toUpperCase());
             SortOrder order = SortOrder.valueOf(sortOrder.toUpperCase());
             Comparator<Product> comparator = Comparator.comparing(product -> {
@@ -77,5 +81,27 @@ public class ArrayListProductService implements ProductService {
             }
         }
         return result.collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Product> advancedSearchOfProducts(List<Product> products, String query, String minPrice, String maxPrice, String searchOption) throws InvalidParamException {
+        List<Product> result = filterAndSortProducts(products,query,null,null);
+        if(isSortParamNotEmpty(minPrice)) {
+            try {
+                BigDecimal min = new BigDecimal(minPrice.replace(',', '.')).setScale(2, BigDecimal.ROUND_DOWN);
+                result = result.stream().filter(product -> product.getPrice().compareTo(min)>=0).collect(Collectors.toList());
+            } catch (NumberFormatException e) {
+                throw new InvalidParamException("MIN");
+            }
+        }
+        if(isSortParamNotEmpty(maxPrice)){
+            try{
+                BigDecimal max = new BigDecimal(maxPrice.replace(',', '.')).setScale(2, BigDecimal.ROUND_DOWN);
+                result = result.stream().filter(product -> product.getPrice().compareTo(max)<=0).collect(Collectors.toList());
+            }catch (NumberFormatException e){
+                throw new InvalidParamException("MAX");
+            }
+        }
+        return result;
     }
 }
