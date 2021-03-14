@@ -8,6 +8,12 @@
   <p>
     Welcome to Expert-Soft training!
   </p>
+  <c:if test="${not empty param.error}">
+       <div class="error">
+           ${param.error}
+       </div>
+       </br>
+  </c:if>
   <form>
     <input name="query" value="${param.query}"/>
     <button> Search </button>

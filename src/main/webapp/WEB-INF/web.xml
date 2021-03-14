@@ -16,7 +16,7 @@
 
     <servlet>
         <servlet-name>productList</servlet-name>
-        <servlet-class>com.es.phoneshop.web.ProductListPageServlet</servlet-class>
+        <servlet-class>com.es.phoneshop.web.product.ProductListPageServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -26,7 +26,7 @@
 
     <servlet>
         <servlet-name>product</servlet-name>
-        <servlet-class>com.es.phoneshop.web.ProductDetailsPageServlet</servlet-class>
+        <servlet-class>com.es.phoneshop.web.product.ProductDetailsPageServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -36,7 +36,7 @@
 
     <servlet>
         <servlet-name>cart</servlet-name>
-        <servlet-class>com.es.phoneshop.web.CartPageServlet</servlet-class>
+        <servlet-class>com.es.phoneshop.web.cart.CartPageServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -46,7 +46,7 @@
 
     <servlet>
         <servlet-name>miniCart</servlet-name>
-        <servlet-class>com.es.phoneshop.web.MiniCartServlet</servlet-class>
+        <servlet-class>com.es.phoneshop.web.cart.MiniCartServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -56,26 +56,67 @@
 
     <servlet>
         <servlet-name>deleteCartItem</servlet-name>
-        <servlet-class>com.es.phoneshop.web.DeleteCartItemServlet</servlet-class>
+        <servlet-class>com.es.phoneshop.web.cart.DeleteCartItemServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>deleteCartItem</servlet-name>
         <url-pattern>/cart/deleteCartItem/*</url-pattern>
     </servlet-mapping>
-    
+  
+    <servlet>
+        <servlet-name>checkout</servlet-name>
+        <servlet-class>com.es.phoneshop.web.order.CheckoutPageServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>checkout</servlet-name>
+        <url-pattern>/checkout</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>overview</servlet-name>
+        <servlet-class>com.es.phoneshop.web.order.OrderOverviewPageServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>overview</servlet-name>
+        <url-pattern>/order/overview/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>advancedSearch</servlet-name>
+        <servlet-class>com.es.phoneshop.web.AdvancedSearchServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>advancedSearch</servlet-name>
+        <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>dosFilter</filter-name>
+        <filter-class>com.es.phoneshop.web.DosFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>dosFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <error-page>
         <location>/WEB-INF/pages/errorProductNotFound.jsp</location>
-        <exception-type>com.es.phoneshop.model.product.exception.ProductNotFoundException</exception-type>
+        <exception-type>com.es.phoneshop.exception.ProductNotFoundException</exception-type>
     </error-page>
 
     <error-page>
         <location>/WEB-INF/pages/error.jsp</location>
-        <error-code> 500 </error-code>
+        <error-code>500</error-code>
     </error-page>
 
     <error-page>
-        <location>/WEB-INF/pages/error.jsp</location>
-        <error-code> 404 </error-code>
+        <location>/WEB-INF/pages/404.jsp</location>
+        <error-code>404</error-code>
     </error-page>
+
 </web-app>
